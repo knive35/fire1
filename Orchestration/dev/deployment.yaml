@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fire1
+  annotations:
+     "sidecar.jaegertracing.io/inject": "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fire1
+  template:
+    metadata:
+      labels:
+        app: fire1
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/path: "/fire1/metrics"
+         prometheus.io/port: "8080"
+         prometheus.io/scrape: "true"
+    spec:
+      volumes:
+      - name: app-config
+        configMap:
+          name: app-config
+      containers:
+      - name: fire1
+        image: 52.170.206.176:5000/testingjenkinss-dev-apps/fire1:testingjenkinss-dev-apps
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: app-config
+          mountPath: /usr/app/src/main/resources/config
+        ports:
+        - containerPort: 8091
+        - containerPort: 8090
+        - containerPort: 8080
+        env: 
+        - name: JAEGER_SERVICE_NAME
+          value: fire1
+        - name: JAEGER_ENDPOINT
+          value: 'http://jaeger-collector.observability.svc:14268/api/traces'
+        - name: JAEGER_SAMPLER_TYPE
+          value: const
+        - name: JAEGER_SAMPLER_PARAM
+          value: '1'
+        - name: JAEGER_REPORTER_LOG_SPANS
+          value: 'true'
+        - name: JAEGER_TAGS
+          value: 'version=${VERSION}'

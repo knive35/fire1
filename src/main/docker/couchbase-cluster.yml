@@ -1,0 +1,23 @@
+version: '2'
+services:
+    fire1-couchbase:
+        build:
+            context: .
+            dockerfile: couchbase/Couchbase.Dockerfile
+        ports:
+            - 8091:8091
+            - 8092:8092
+            - 8093:8093
+            - 11210:11210
+        environment:
+            - TYPE=MASTER
+            - BUCKET=fire1
+    fire1-couchbase-node:
+        build:
+            context: .
+            dockerfile: couchbase/Couchbase.Dockerfile
+        environment:
+            - TYPE=WORKER
+            - BUCKET=fire1
+            - COUCHBASE_MASTER=fire1-couchbase
+            - AUTO_REBALANCE=false
