@@ -1,7 +1,7 @@
 APP_NAME: 'testingjenkinss'
 MS_NAME: 'fire1'
 BRANCH: 'master'
-GIT_SOURCE_URL: 'https://github.com/amalkurup/fire1.git'
+GIT_SOURCE_URL: 'https://github.com/knive35/fire1.git'
 SONAR_HOST_URL: 'http://fetched_sonar_url'
 DOCKER_REGISTRY: '52.170.206.176:5000'
 CODE_QUALITY : 'True'
